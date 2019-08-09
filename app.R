@@ -101,9 +101,9 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     leaflet(mergestates)  %>% addTiles() %>% setView(lng = -87.251475, lat=39.835402,zoom=4) %>% 
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
-      addPolygons(data=mergestates,weight=1, smoothFactor = 0.5, col="grey", fillColor = ~col_pal(count), 
-                  popup = pop_up_layout,
-                  fillOpacity = 0.75) %>% 
+      # addPolygons(data=mergestates,weight=1, smoothFactor = 0.5, col="grey", fillColor = ~col_pal(count), 
+      #             popup = pop_up_layout,
+      #             fillOpacity = 0.75) %>% 
       addLegend(title = "Number of ESA-Listed Species", position = "topleft", 
                 pal = col_pal, values = mergestates$count)
     
