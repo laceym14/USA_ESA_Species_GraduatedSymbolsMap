@@ -10,6 +10,7 @@
 
 library(leaflet)
 library(plyr)
+library(dplyr)
 library(shiny)
 library(sp)
 library(rgdal)
@@ -101,6 +102,14 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     leaflet(mergestates)  %>% addTiles() %>% setView(lng = -87.251475, lat=39.835402,zoom=4) %>% 
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
+      addCircles(lng = ~INTPTLON,
+                 lat = ~INTPTLAT,
+                 radius = ~circle_size,
+                 color = ~colorBin("RdYlBu",
+                                   range(circle_color),
+                                   bins=5)(circle_color),
+                 fillOpacity=0.85,
+                 stroke = FALSE,
       # addPolygons(data=mergestates,weight=1, smoothFactor = 0.5, col="grey", fillColor = ~col_pal(count), 
       #             popup = pop_up_layout,
       #             fillOpacity = 0.75) %>% 
