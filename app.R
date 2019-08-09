@@ -104,7 +104,7 @@ server <- function(input, output) {
       addPolygons(data=mergestates,weight=1, smoothFactor = 0.5, col="grey", fillColor = ~col_pal(count), 
                   popup = pop_up_layout,
                   fillOpacity = 0.75) %>% 
-      addLegend(title = "Number of ESA-Listed Species", position = "bottomleft", 
+      addLegend(title = "Number of ESA-Listed Species", position = "topleft", 
                 pal = col_pal, values = mergestates$count)
     
   })
