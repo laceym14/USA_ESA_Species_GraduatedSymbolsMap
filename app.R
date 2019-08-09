@@ -10,7 +10,7 @@
 
 library(leaflet)
 library(plyr)
-library(dplyr)
+library(plyr)
 library(shiny)
 library(sp)
 library(rgdal)
@@ -25,8 +25,9 @@ library(RColorBrewer)
 species_data <- read.csv("data/ESAIntrastateSpecies.csv")
 shapeData <- readOGR("data/states_proj.shp")
 ogrInfo("data/states_proj.shp")
-mergestates <- merge(shapeData, species_data, by="NAME")
-
+# mergestates <- merge(shapeData, species_data, by="NAME")
+mergestates <- readRDS("data/mergestates.rds")
+# mergestates$lon <- as.numeric(mergestates$lon)
 
 ui <- fluidPage(theme = "leaflet_adj.css",
   br(),
@@ -102,19 +103,17 @@ server <- function(input, output) {
   output$map <- renderLeaflet({
     leaflet(mergestates)  %>% addTiles() %>% setView(lng = -87.251475, lat=39.835402,zoom=4) %>% 
       addProviderTiles(providers$Esri.WorldTopoMap) %>%
-      addCircles(lng = ~INTPTLON,
-                 lat = ~INTPTLAT,
-                 radius = ~circle_size,
-                 color = ~colorBin("RdYlBu",
-                                   range(circle_color),
-                                   bins=5)(circle_color),
+      addCircles(lng = ~lon,
+                 lat = ~lat,
+                 radius = ~List_Sp^2,
+                 color = "red",
                  fillOpacity=0.85,
-                 stroke = FALSE,
+                 stroke = FALSE)
       # addPolygons(data=mergestates,weight=1, smoothFactor = 0.5, col="grey", fillColor = ~col_pal(count), 
       #             popup = pop_up_layout,
       #             fillOpacity = 0.75) %>% 
-      addLegend(title = "Number of ESA-Listed Species", position = "topleft", 
-                pal = col_pal, values = mergestates$count)
+      # addLegend(title = "Number of ESA-Listed Species", position = "topleft", 
+      #           pal = col_pal, values = mergestates$count)
     
   })
   
